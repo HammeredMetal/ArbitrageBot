@@ -1,28 +1,37 @@
 import express from "express";
 import bodyParser from "body-parser";
-import pg from "pg";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const app = express();
 const port = 3000;
-const { Client } = pg;
-
-const db = new Client ({
-  user: process.env.PGADMIN_USER,
-  host: process.env.PGADMIN_HOST,
-  database: process.env.PGADMIN_DB_NAME,
-  password: process.env.PGADMIN_PASSWORD,
-  port: 5432,
-});
-db.connect();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+import { rayVersion, orcaVersion } from './api.js';
+import arbiTest from './arbitrage.js';
+import db from './database.js';
 
+// Modular tests
+//Test API
+async function testAPI() {
+  try {
+    const rayTest = await rayVersion();
+    console.log(`Raydium version: ${rayTest.data.data.latest}`);
+  } catch (error) {
+    console.error('Error: ', error);
+  }
+    try {
+    const orcaTest = await orcaVersion();
+    console.log(`Orca status: ${orcaTest.data.status}`);
+  } catch (error) {
+    console.error('Error: ', error);
+  }
+}
 
+testAPI();
+
+console.log(arbiTest);
+console.log(`Database: ${db.database}`);
 
 
 
@@ -32,3 +41,9 @@ app.use(express.static("public"));
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+
+//GIT UPDATE PROCESS
+//git add .
+//git commit -m "Insert message"
+//git push
