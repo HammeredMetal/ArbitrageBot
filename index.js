@@ -7,34 +7,21 @@ const port = 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-import { rayVersion, orcaVersion } from './api.js';
+import { meteoraVersion, orcaVersion } from './API/index.js';
 import arbiTest from './arbitrage.js';
 import db from './database.js';
 
-// Modular tests
-//Test API
-async function testAPI() {
-  try {
-    const rayTest = await rayVersion();
-    console.log(`Raydium version: ${rayTest.data.data.latest}`);
-  } catch (error) {
-    console.error('Error: ', error);
-  }
-    try {
-    const orcaTest = await orcaVersion();
-    console.log(`Orca status: ${orcaTest.data.status}`);
-  } catch (error) {
-    console.error('Error: ', error);
-  }
+async function APITest() {
+  const meteoraTest = await meteoraVersion();
+  const orcaTest = await orcaVersion();
+  console.log(`Meteora TVL: $${meteoraTest}`);
+  console.log(`Orca status: ${orcaTest}`);
 }
-
-testAPI();
+APITest();
 
 console.log(arbiTest);
 console.log(`Database: ${db.database}`);
-
-
-
+ 
 
 
 
