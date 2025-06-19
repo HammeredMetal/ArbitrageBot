@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { fileLoader } from 'ejs';
 
 const meteoraAPI_URL = 'https://dlmm-api.meteora.ag/';
 
@@ -49,12 +48,12 @@ async function meteoraData() {
                 const vol_24Hr = pair.trade_volume_24h;
                 const fees_24Hr = pair.fees_24h;
 
-                console.log(`Meteora, Bin Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}`);
+                // console.log(`Meteora, Bin Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}`);
 
             }
         }
-        console.log(`Initial pools detected: ${totalPairs}`);
-        console.log(`Cleaned pools detected: ${cleanMeteoraPairs}`); 
+        console.log(`Meteora - initial pools detected: ${totalPairs}`);
+        console.log(`Meteora - Cleaned pools detected: ${cleanMeteoraPairs}`); 
 
     } catch (error) {
         console.error('Failed to get Meteora data', error);
