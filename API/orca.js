@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { name } from 'ejs';
 
 const orcaAPI_URL = 'https://api.orca.so/v2/solana/';
 
@@ -30,9 +31,21 @@ async function orcaData() {
             return pool.stats["24h"].volume > 1;
         });
 
-        const filteredOrcaPairs = filteredPools.length;
+        //Sanitise and normalise symbols
+        for (const filteredPool of filteredPools) {
+            function sanitiseSymbol(symbol) {
+                return symbol
+                .replace(/[^\w]/g, "")
+                .toUpperCase()
+                .trim()
+                .replaceAll("$","")
+            }
+            const name = `${sanitiseSymbol(filteredPool.tokenA.symbol)}_${sanitiseSymbol(filteredPool.tokenB.symbol)}`
+                    console.log("Symbol name: ", name)
+        }
 
-        console.log('Orca - Cleaned pools detected: ',filteredOrcaPairs);
+
+        console.log('Orca - Cleaned pools detected: ',filteredPools.length);
         console.log('Orca - Initial pools detected: ',totalPairs);   
 
     } catch (error) {
