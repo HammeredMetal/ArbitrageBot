@@ -27,8 +27,16 @@ async function orcaData() {
         const totalPairs = pools.length;
 
         //Filter low vol pools
-        const filteredPools = pools.filter(pool => {
+        const volumeFilter = pools.filter(pool => {
             return pool.stats["24h"].volume > 1;
+        });
+
+        //Removes all pairs that are not either Sol or USDC
+        const filteredPools = volumeFilter.filter(pool => {
+            const allowed = ["SOL", "USDC"];
+            const a = pool.tokenA.symbol.toUpperCase();
+            const b = pool.tokenB.symbol.toUpperCase();
+            return allowed.includes(a) || allowed.includes(b);
         });
 
         //Sanitise and normalise symbols
@@ -40,8 +48,17 @@ async function orcaData() {
                 .trim()
                 .replaceAll("$","")
             }
-            const name = `${sanitiseSymbol(filteredPool.tokenA.symbol)}_${sanitiseSymbol(filteredPool.tokenB.symbol)}`
-                    console.log("Symbol name: ", name)
+            const name = `${sanitiseSymbol(filteredPool.tokenA.symbol)}_${sanitiseSymbol(filteredPool.tokenB.symbol)}`;
+            const priceAtoB = filteredPool.price;
+            const fee = filteredPool.feeRate;
+            const tvlUSDC = parseFloat(filteredPool.tvlUsdc);
+            const addressA = filteredPool.tokenA.address;
+            const addressB = filteredPool.tokenB.address;
+            const poolAddress = filteredPool.address;
+
+
+            console.log(`Symbol name: ${name}`);
+            console.log(`Orca - Symbol name: ${name}, Price A to B: $${priceAtoB}, Pool address: ${poolAddress}, Address A: ${addressA}, Address B: ${addressB}, Fee Rate: ${fee}, TVL: $${tvlUSDC}`);
         }
 
 

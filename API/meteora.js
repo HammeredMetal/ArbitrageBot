@@ -48,6 +48,7 @@ async function meteoraData() {
                 const vol_24Hr = pair.trade_volume_24h;
                 const fees_24Hr = pair.fees_24h;
 
+                // console.log(`Meteora, Bin Pair: ${name}`);
                 // console.log(`Meteora, Bin Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}`);
 
             }
