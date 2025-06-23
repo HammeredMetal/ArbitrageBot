@@ -54,7 +54,7 @@ async function orcaData() {
 
              priceAtoB = 1/priceAtoB;
 
-            console.log(`Orca - clean and normalised data - Symbol name: ${name}, Price A to B: ${priceAtoB}, Pool address: ${poolAddress}, Address A: ${addressA}, Address B: ${addressB}, Fee Rate: ${fee}, TVL: $${tvlUSDC}, Flipped: ${flipped}`);
+            // console.log(`Orca - clean and normalised data - Symbol name: ${name}, Price A to B: ${priceAtoB}, Pool address: ${poolAddress}, Address A: ${addressA}, Address B: ${addressB}, Fee Rate: ${fee}, TVL: $${tvlUSDC}, Flipped: ${flipped}`);
         }
 
         //Sanitise pair names
@@ -81,7 +81,7 @@ async function orcaData() {
             if (( symbolB === "SOL" && symbolA !== "USDC" && symbolA !== "USDT") || (( symbolB === "USDC" || symbolB ==="USDT") && (symbolA !== "USDC" && symbolA !== "USDT" && symbolA !=="SOL"))){
                     flipPair(poolAddress,name,priceAtoB,fee,tvlUSDC,addressA,addressB,flipped,symbolA,symbolB);
                 } else {
-                    console.log(`Orca - clean and normalised data - Symbol name: ${name}, Price A to B: ${priceAtoB}, Pool address: ${poolAddress}, Address A: ${addressA}, Address B: ${addressB}, Fee Rate: ${fee}, TVL: $${tvlUSDC}, Flipped: ${flipped}`);
+                    // console.log(`Orca - clean and normalised data - Symbol name: ${name}, Price A to B: ${priceAtoB}, Pool address: ${poolAddress}, Address A: ${addressA}, Address B: ${addressB}, Fee Rate: ${fee}, TVL: $${tvlUSDC}, Flipped: ${flipped}`);
                 }
         }
 

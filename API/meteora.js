@@ -37,6 +37,11 @@ async function meteoraData() {
                 return pool.trade_volume_24h > 1;
             });
 
+            function flipPair(name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped) {
+                flipped = true;
+                console.log(`Meteora, Pairs to Flip. Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}, Flipped: ${flipped}`);
+            }
+
             cleanMeteoraPairs += filteredPools.length;
 
             for (const pair of filteredPools) {
@@ -47,9 +52,15 @@ async function meteoraData() {
                 const currentPrice = pair.current_price;
                 const vol_24Hr = pair.trade_volume_24h;
                 const fees_24Hr = pair.fees_24h;
+                let flipped = false;
+
+                if ((name.endsWith("SOL")) || ((name.endsWith("USDC")) && !(name.startsWith("SOL")))) {
+                    flipPair(name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped)
+                } else {
 
                 // console.log(`Meteora, Bin Pair: ${name}`);
-                // console.log(`Meteora, Bin Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}`);
+                console.log(`Meteora, Bin Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}, Flipped: ${flipped}`);
+                }
 
             }
         }
