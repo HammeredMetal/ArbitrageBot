@@ -37,9 +37,27 @@ async function meteoraData() {
                 return pool.trade_volume_24h > 1;
             });
 
+            //Flip pairs function
             function flipPair(name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped) {
                 flipped = true;
-                console.log(`Meteora, Pairs to Flip. Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}, Flipped: ${flipped}`);
+
+                //Flip name
+                let underScorePos = name.indexOf("_")
+                if (underScorePos !== -1) {
+                    let tokenX = name.slice(0, underScorePos);
+                    let tokenY = name.slice(underScorePos+1)
+                    name = tokenY + "_" + tokenX;
+                }
+
+                //Flip addresses
+                let temp = addressX
+                addressX = addressY;
+                addressY = temp;
+
+                //Flip Price
+                currentPrice = 1/currentPrice;
+
+                console.log(`Meteora, Flipped Pairs. Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}, Flipped: ${flipped}`);
             }
 
             cleanMeteoraPairs += filteredPools.length;
@@ -59,7 +77,7 @@ async function meteoraData() {
                 } else {
 
                 // console.log(`Meteora, Bin Pair: ${name}`);
-                console.log(`Meteora, Bin Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}, Flipped: ${flipped}`);
+                // console.log(`Meteora, Bin Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}, Flipped: ${flipped}`);
                 }
 
             }
