@@ -13,21 +13,27 @@ const pool = new Pool ({
 
 export async function insertMeteoraPool(poolData) {
   const {
-    pair, address, address_x, address_y, price, vol_24hr, fees_24hr, flipped
+    name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped
   } = poolData;
 
-  const query = `
-  INSERT INTO meteora (
+  const query = `INSERT INTO meteora (
   pair, address, address_x, address_y, price, vol_24hr, fees_24hr, flipped)
-  VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
-  const values = [pair, address, address_x, address_y,  price, vol_24hr, fees_24hr, flipped];
- 
-  // console.log('poolData in db.js = ', poolData)
+  VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+  ON CONFLICT (address) DO UPDATE SET
+  pair = EXCLUDED.pair,
+  address_x = EXCLUDED.address_x,
+  address_y = EXCLUDED.address_y,
+  price = EXCLUDED.price,
+  vol_24hr = EXCLUDED.vol_24hr,
+  fees_24hr = EXCLUDED.fees_24hr,
+  flipped = EXCLUDED.flipped`;
+  const values = [name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped];
 
   try {
     await pool.query(query, values);
-    console.log(`Inserted pool: ${pair}`);
+    console.log('Inserted pool: ', name);
   } catch (err) {
-    // console.error(`DB insert failed for ${pair}:`, err.message);
+    console.error('DB insert failed for ', name, err.message);
   }
 }
+ 
