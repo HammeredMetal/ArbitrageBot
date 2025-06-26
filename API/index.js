@@ -1,7 +1,15 @@
 import axios from 'axios';
 
-import { meteoraVersion } from './meteora.js';
+import { meteoraVersion, meteoraData } from './meteora.js';
 import { orcaVersion } from './orca.js';
+
+// Test to see if cleanedMeteora array is being passed on
+// async function run(){
+// const pools= await meteoraData()
+// console.log('api/index.js response:', pools)
+// }
+// run()
+
 
 // // Modular tests
 // //Test API
@@ -27,7 +35,7 @@ import { orcaVersion } from './orca.js';
 // }
 // orcaAPITest();
 
-export { meteoraVersion, orcaVersion }; 
+export { meteoraVersion, meteoraData, orcaVersion };
 
 
 

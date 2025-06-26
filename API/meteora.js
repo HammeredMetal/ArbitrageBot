@@ -19,11 +19,12 @@ export { meteoraVersion };
 
 //Pull Meteora data
 //Filters response by TVL<$5000
-async function meteoraData() {
+export async function meteoraData() {
     try {
         let response = await axios.get(meteoraAPI_URL + 'pair/all_by_groups?hide_low_tvl=5000');
         response = response.data;
 
+        const cleanedMeteora=[];
         let totalPairs = 0;
         let cleanMeteoraPairs = 0;
         const groupNumber = response.groups.length;
@@ -36,6 +37,7 @@ async function meteoraData() {
             const filteredPools = pools.filter(pool => {
                 return pool.trade_volume_24h > 1;
             });
+
 
             //Flip pairs function
             function flipPair(name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped) {
@@ -57,7 +59,19 @@ async function meteoraData() {
                 //Flip Price
                 currentPrice = 1/currentPrice;
 
-                console.log(`Meteora, Flipped Pairs. Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}, Flipped: ${flipped}`);
+                // console.log(`Meteora, Flipped Pairs. Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}, Flipped: ${flipped}`);
+
+                // finalMeteoraData(name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped);
+                cleanedMeteora.push({
+                    name,
+                    binAddress,
+                    addressX,
+                    addressY,
+                    currentPrice,
+                    vol_24Hr,
+                    fees_24Hr,
+                    flipped,
+                });
             }
 
             cleanMeteoraPairs += filteredPools.length;
@@ -76,19 +90,50 @@ async function meteoraData() {
                     flipPair(name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped)
                 } else {
 
-                // console.log(`Meteora, Bin Pair: ${name}`);
-                // console.log(`Meteora, Bin Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}, Flipped: ${flipped}`);
-                }
+                    // console.log(`Meteora, Bin Pair: ${name}`);
+                    // console.log(`Meteora, Bin Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}, Flipped: ${flipped}`);
 
+                    // finalMeteoraData(name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped);
+                    cleanedMeteora.push({
+                        name,
+                        binAddress,
+                        addressX,
+                        addressY,
+                        currentPrice,
+                        vol_24Hr,
+                        fees_24Hr,
+                        flipped,
+                    });
+                }
             }
         }
         console.log(`Meteora - initial pools detected: ${totalPairs}`);
         console.log(`Meteora - Cleaned pools detected: ${cleanMeteoraPairs}`); 
-
+        // console.log('Meteora.j - cleanedMeteora =', cleanedMeteora)
+        return cleanedMeteora;
     } catch (error) {
         console.error('Failed to get Meteora data', error);
         throw error
     }
+
+//     //Send data to meteora db
+//     async function finalMeteoraData(name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped) {
+//     const cleanedMeteora=[];
+    
+//     for (const pool of finalMeteoraData)
+//     cleanedMeteora.push({
+//         name,
+//         binAddress,
+//         addressX,
+//         addressY,
+//         currentPrice,
+//         vol_24Hr,
+//         fees_24Hr,
+//         flipped,
+//     });
+//                 console.log(`cleanedMeteora  = ${cleanedMeteora}`)
+//     return cleanedMeteora;
+// }
+
 }
-meteoraData();
-// export { meteoraData };
+

@@ -7,9 +7,23 @@ const port = 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-import { meteoraVersion, orcaVersion } from './API/index.js';
+import { meteoraVersion, meteoraData, orcaVersion } from './API/index.js';
 import arbiTest from './arbitrage.js';
-import db from './database.js';
+import { insertMeteoraPool } from './database.js';
+
+async function run() {
+  const pools = await meteoraData();
+
+  // console.log('Index.js calling cleanedMeteora array: ', pools)
+  console.log(`Found ${pools.length} viable Meteora pools.`);
+
+  for (const pool of pools) {
+    await insertMeteoraPool(pool);
+  }
+
+  //console.log(`Meteora pools successfully inserted into the database.`)
+}
+run()
 
 async function APITest() {
   const meteoraTest = await meteoraVersion();
@@ -20,9 +34,6 @@ async function APITest() {
 APITest();
 
 console.log(arbiTest);
-console.log(`Database: ${db.database}`);
- 
-
 
 
 app.listen(port, () => {
@@ -32,5 +43,6 @@ app.listen(port, () => {
 
 //GIT UPDATE PROCESS
 //git add .
+//git status
 //git commit -m "Insert message"
 //git push
