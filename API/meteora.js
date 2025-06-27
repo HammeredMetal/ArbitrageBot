@@ -2,20 +2,6 @@ import axios from 'axios';
 
 const meteoraAPI_URL = 'https://dlmm-api.meteora.ag/';
 
-//Test Meteora endpoints
-async function meteoraVersion() {
-    try {
-        let response = await axios.get(meteoraAPI_URL + 'info/protocol_metrics');
-        response = response.data.total_tvl
-        return response;
-    } catch (error) {
-        console.error('Failed to get Meteora version', error);
-        throw error
-    }
-}
-meteoraVersion();
-export { meteoraVersion };
-
 
 //Pull Meteora data
 //Filters response by TVL<$5000
@@ -59,9 +45,6 @@ export async function meteoraData() {
                 //Flip Price
                 currentPrice = 1/currentPrice;
 
-                // console.log(`Meteora, Flipped Pairs. Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}, Flipped: ${flipped}`);
-
-                // finalMeteoraData(name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped);
                 cleanedMeteora.push({
                     name,
                     binAddress,
@@ -89,11 +72,6 @@ export async function meteoraData() {
                 if ((name.endsWith("SOL")) || ((name.endsWith("USDC")) && !(name.startsWith("SOL")))) {
                     flipPair(name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped)
                 } else {
-
-                    // console.log(`Meteora, Bin Pair: ${name}`);
-                    // console.log(`Meteora, Bin Pair: ${name}, Bin Address: ${binAddress}, Token X Address: ${addressX}, Token Y Address: ${addressY}, Price: ${currentPrice}, 24 Hr Volume: ${vol_24Hr}, 24 Hr Fees: ${fees_24Hr}, Flipped: ${flipped}`);
-
-                    // finalMeteoraData(name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped);
                     cleanedMeteora.push({
                         name,
                         binAddress,
@@ -107,33 +85,10 @@ export async function meteoraData() {
                 }
             }
         }
-        console.log(`Meteora - initial pools detected: ${totalPairs}`);
-        console.log(`Meteora - Cleaned pools detected: ${cleanMeteoraPairs}`); 
-        // console.log('Meteora.j - cleanedMeteora =', cleanedMeteora)
         return cleanedMeteora;
     } catch (error) {
         console.error('Failed to get Meteora data', error);
         throw error
     }
-
-//     //Send data to meteora db
-//     async function finalMeteoraData(name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped) {
-//     const cleanedMeteora=[];
-    
-//     for (const pool of finalMeteoraData)
-//     cleanedMeteora.push({
-//         name,
-//         binAddress,
-//         addressX,
-//         addressY,
-//         currentPrice,
-//         vol_24Hr,
-//         fees_24Hr,
-//         flipped,
-//     });
-//                 console.log(`cleanedMeteora  = ${cleanedMeteora}`)
-//     return cleanedMeteora;
-// }
-
 }
 

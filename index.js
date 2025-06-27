@@ -7,28 +7,25 @@ const port = 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-import { meteoraVersion, meteoraData, orcaVersion } from './API/index.js';
+import { meteoraData, orcaVersion } from './API/index.js';
 import arbiTest from './arbitrage.js';
 import { insertMeteoraPool } from './database.js';
 
 async function run() {
   const pools = await meteoraData();
 
-  // console.log('Index.js calling cleanedMeteora array: ', pools)
   console.log(`Found ${pools.length} viable Meteora pools.`);
 
   for (const pool of pools) {
     await insertMeteoraPool(pool);
   }
 
-  //console.log(`Meteora pools successfully inserted into the database.`)
+  console.log(`Meteora pools successfully inserted into the database.`)
 }
 run()
 
 async function APITest() {
-  const meteoraTest = await meteoraVersion();
   const orcaTest = await orcaVersion();
-  console.log(`Meteora TVL: $${meteoraTest}`);
   console.log(`Orca status: ${orcaTest}`);
 }
 APITest();
