@@ -19,11 +19,12 @@ export { orcaVersion };
 
 
 //Pull Orca data
-async function orcaData() {
+export async function orcaData() {
     try {
         let response = await axios.get(orcaAPI_URL + 'pools?minTvl=1000&&size=3000');
         const pools = response.data.data;
 
+        const cleanedOrca = [];
         const totalPairs = pools.length;
 
         //Filter low vol pools
@@ -54,6 +55,16 @@ async function orcaData() {
 
              priceAtoB = 1/priceAtoB;
 
+            cleanedOrca.push({
+                name, 
+                priceAtoB,
+                fee,
+                tvlUSDC,
+                addressA,
+                addressB,
+                poolAddress,
+                flipped,
+            });
             // console.log(`Orca - clean and normalised data - Symbol name: ${name}, Price A to B: ${priceAtoB}, Pool address: ${poolAddress}, Address A: ${addressA}, Address B: ${addressB}, Fee Rate: ${fee}, TVL: $${tvlUSDC}, Flipped: ${flipped}`);
         }
 
@@ -81,6 +92,16 @@ async function orcaData() {
             if (( symbolB === "SOL" && symbolA !== "USDC" && symbolA !== "USDT") || (( symbolB === "USDC" || symbolB ==="USDT") && (symbolA !== "USDC" && symbolA !== "USDT" && symbolA !=="SOL"))){
                     flipPair(poolAddress,name,priceAtoB,fee,tvlUSDC,addressA,addressB,flipped,symbolA,symbolB);
                 } else {
+                    cleanedOrca.push({
+                        name, 
+                        priceAtoB,
+                        fee,
+                        tvlUSDC,
+                        addressA,
+                        addressB,
+                        poolAddress,
+                        flipped,
+                    });
                     // console.log(`Orca - clean and normalised data - Symbol name: ${name}, Price A to B: ${priceAtoB}, Pool address: ${poolAddress}, Address A: ${addressA}, Address B: ${addressB}, Fee Rate: ${fee}, TVL: $${tvlUSDC}, Flipped: ${flipped}`);
                 }
         }
@@ -88,10 +109,10 @@ async function orcaData() {
 
         console.log('Orca - Cleaned pools detected: ',filteredPools.length);
         console.log('Orca - Initial pools detected: ',totalPairs);   
-
+        return cleanedOrca;
     } catch (error) {
         console.error('Failed to get Orca data', error);
+        throw error;
     }
 }
-orcaData();
-//export { orcaData };
+

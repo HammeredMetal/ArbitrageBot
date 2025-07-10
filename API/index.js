@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 import { meteoraData } from './meteora.js';
-import { orcaVersion } from './orca.js';
+import { orcaVersion, orcaData } from './orca.js';
 
-export { meteoraData, orcaVersion };
+export { meteoraData, orcaVersion, orcaData };
 
 
 

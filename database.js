@@ -26,14 +26,42 @@ export async function insertMeteoraPool(poolData) {
   price = EXCLUDED.price,
   vol_24hr = EXCLUDED.vol_24hr,
   fees_24hr = EXCLUDED.fees_24hr,
-  flipped = EXCLUDED.flipped`;
+  flipped = EXCLUDED.flipped,
+  timestamp = NOW()`;
   const values = [name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped];
 
   try {
     await pool.query(query, values);
-    console.log('Inserted pool: ', name);
+    console.log('Inserted Meteora pool: ', name);
   } catch (err) {
-    console.error('DB insert failed for ', name, err.message);
+    console.error('Meteora DB insert failed for ', name, err.message);
   }
-}
+};
+
+export async function insertOrcaPool(poolData) {
+  const {
+    name, poolAddress, addressA, addressB, priceAtoB, tvlUSDC, fee, flipped
+  } = poolData;
+
+  const query = `INSERT INTO orca (
+  pair, address, address_a, address_b, price, tvl, fee, flipped)
+  VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+  ON CONFLICT (address) DO UPDATE SET
+  pair = EXCLUDED.pair,
+  address_a = EXCLUDED.address_a,
+  address_b = EXCLUDED.address_b,
+  price = EXCLUDED.price,
+  tvl = EXCLUDED.tvl,
+  fee = EXCLUDED.fee,
+  flipped = EXCLUDED.flipped,
+  timestamp = NOW()`;
+  const values = [name, poolAddress, addressA, addressB, priceAtoB, tvlUSDC, fee, flipped];
+
+  try {
+    await pool.query(query, values);
+    console.log('Inserted Orca pool: ', name);
+  } catch (err) {
+    console.error('Orca DB insert failed for ', name, err.message);
+  }
+}; 
  

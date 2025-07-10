@@ -14,6 +14,40 @@ export async function meteoraData() {
         let totalPairs = 0;
         let cleanMeteoraPairs = 0;
         const groupNumber = response.groups.length;
+
+
+        //Flip pairs function
+        function flipPair(name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped) {
+            flipped = true;
+
+            //Flip name
+            let underScorePos = name.indexOf("_")
+            if (underScorePos !== -1) {
+                let tokenX = name.slice(0, underScorePos);
+                let tokenY = name.slice(underScorePos+1)
+                name = tokenY + "_" + tokenX;
+            }
+
+            //Flip addresses
+            let temp = addressX
+            addressX = addressY;
+            addressY = temp;
+
+            //Flip Price
+            currentPrice = 1/currentPrice;
+
+            cleanedMeteora.push({
+                name,
+                binAddress,
+                addressX,
+                addressY,
+                currentPrice,
+                vol_24Hr,
+                fees_24Hr,
+                flipped,
+            });
+        }
+
         
         for (let i=0; i<groupNumber; i++){
             let pools = response.groups[i].pairs;
@@ -25,37 +59,7 @@ export async function meteoraData() {
             });
 
 
-            //Flip pairs function
-            function flipPair(name, binAddress, addressX, addressY, currentPrice, vol_24Hr, fees_24Hr, flipped) {
-                flipped = true;
 
-                //Flip name
-                let underScorePos = name.indexOf("_")
-                if (underScorePos !== -1) {
-                    let tokenX = name.slice(0, underScorePos);
-                    let tokenY = name.slice(underScorePos+1)
-                    name = tokenY + "_" + tokenX;
-                }
-
-                //Flip addresses
-                let temp = addressX
-                addressX = addressY;
-                addressY = temp;
-
-                //Flip Price
-                currentPrice = 1/currentPrice;
-
-                cleanedMeteora.push({
-                    name,
-                    binAddress,
-                    addressX,
-                    addressY,
-                    currentPrice,
-                    vol_24Hr,
-                    fees_24Hr,
-                    flipped,
-                });
-            }
 
             cleanMeteoraPairs += filteredPools.length;
 
