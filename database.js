@@ -65,3 +65,35 @@ export async function insertOrcaPool(poolData) {
   }
 }; 
  
+
+export async function getAllMeteoraPools() {
+
+  const query = `
+    SELECT pair, address, address_x, address_y, price, vol_24hr, fees_24hr
+    FROM meteora
+    `;
+
+  try {
+    const mResult = await pool.query(query);
+    return mResult.rows;
+  } catch (err) {
+    console.error('Meteora DB retrieval failed for ', err.message);
+    throw err;
+  }
+}
+
+export async function getAllOrcaPools() {
+
+    const query = `
+    SELECT pair, address, address_a, address_b, price, tvl, fee
+    FROM orca
+    `;
+
+  try {
+    const oResult = await pool.query(query);
+    return oResult.rows;
+  } catch (err) {
+    console.error('Orca DB retrieval failed for ', err.message);
+    throw err;
+  }
+}

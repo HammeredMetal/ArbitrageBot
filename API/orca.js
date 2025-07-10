@@ -3,20 +3,6 @@ import { name } from 'ejs';
 
 const orcaAPI_URL = 'https://api.orca.so/v2/solana/';
 
-//Test Orca endpoints
-async function orcaVersion() {
-    try {
-        let response = await axios.get(orcaAPI_URL + 'health');
-        response = response.data.status;
-        return response;
-    } catch (error) {
-        console.error('Failed to get Orca version', error);
-        throw error
-    }
-}
-orcaVersion();
-export { orcaVersion };
-
 
 //Pull Orca data
 export async function orcaData() {
@@ -102,13 +88,8 @@ export async function orcaData() {
                         poolAddress,
                         flipped,
                     });
-                    // console.log(`Orca - clean and normalised data - Symbol name: ${name}, Price A to B: ${priceAtoB}, Pool address: ${poolAddress}, Address A: ${addressA}, Address B: ${addressB}, Fee Rate: ${fee}, TVL: $${tvlUSDC}, Flipped: ${flipped}`);
                 }
-        }
-
-
-        console.log('Orca - Cleaned pools detected: ',filteredPools.length);
-        console.log('Orca - Initial pools detected: ',totalPairs);   
+        } 
         return cleanedOrca;
     } catch (error) {
         console.error('Failed to get Orca data', error);

@@ -7,8 +7,8 @@ const port = 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-import { meteoraData, orcaData, orcaVersion } from './API/index.js';
-import arbiTest from './arbitrage.js';
+import { meteoraData, orcaData } from './API/index.js';
+import { checkArbitrage } from './arbitrage.js';
 import { insertMeteoraPool, insertOrcaPool } from './database.js';
 
 async function run() {
@@ -29,15 +29,13 @@ async function run() {
   console.log(`Meteora pools successfully inserted into the database.`)
   console.log(`Orca pools successfully inserted into the database.`)
 }
-run()
+// run()
 
-async function APITest() {
-  const orcaTest = await orcaVersion();
-  console.log(`Orca status: ${orcaTest}`);
+
+async function runArb() {
+  await checkArbitrage();
 }
-APITest();
-
-console.log(arbiTest);
+runArb();
 
 
 app.listen(port, () => {
