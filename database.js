@@ -32,7 +32,7 @@ export async function insertMeteoraPool(poolData) {
 
   try {
     await pool.query(query, values);
-    console.log('Inserted Meteora pool: ', name);
+    // console.log('Inserted Meteora pool: ', name);
   } catch (err) {
     console.error('Meteora DB insert failed for ', name, err.message);
   }
@@ -59,7 +59,7 @@ export async function insertOrcaPool(poolData) {
 
   try {
     await pool.query(query, values);
-    console.log('Inserted Orca pool: ', name);
+    // console.log('Inserted Orca pool: ', name);
   } catch (err) {
     console.error('Orca DB insert failed for ', name, err.message);
   }
@@ -69,8 +69,8 @@ export async function insertOrcaPool(poolData) {
 export async function getAllMeteoraPools() {
 
   const query = `
-    SELECT pair, address, address_x, address_y, price, vol_24hr, fees_24hr
-    FROM meteora
+    SELECT pair, address, address_x, address_y, price, vol_24hr, fees_24hr, dex, flipped, timestamp
+    FROM meteora WHERE timestamp > NOW() - INTERVAL '30 seconds';
     `;
 
   try {
@@ -85,8 +85,8 @@ export async function getAllMeteoraPools() {
 export async function getAllOrcaPools() {
 
     const query = `
-    SELECT pair, address, address_a, address_b, price, tvl, fee
-    FROM orca
+    SELECT pair, address, address_a, address_b, price, tvl, fee, dex, flipped, timestamp
+    FROM orca WHERE timestamp > NOW() - INTERVAL '30 seconds';
     `;
 
   try {

@@ -6,18 +6,21 @@ export async function checkArbitrage() {
     const orcaPools = await getAllOrcaPools();
 
     for (const mPool of meteoraPools) {
-        const oPool = orcaPools.find(op => op.pair === mPool.pair);
-        //Need to change this to compare address_a with addres_x and address_b with address_y
-        console.log(oPool);
+        const oPool = orcaPools.find(op => (op.address_a === mPool.address_x) && (op.address_b === mPool.address_y));
+        if (!oPool) continue;
 
-        // if (oPool) {
-        //     const priceDiff = ((oPool.price - mPool.price) / mPool.price) * 100;
+        // console.log("Comparable pairs found: ", oPool, mPool);
 
-        //     if (Math.abs(priceDiff) > 1) {
-        //         console.log(`Arbitrage detected on ${mPool.pair}:`);
-        //         console.log(`   Meteora: $${mPool.price}, Orca: $${oPool.price}`);
-        //         console.log(`   Diff ${priceDiff.toFixed(2)}%`);
-        //     }
-        // }
+        if (oPool) {
+            const priceDiff = ((oPool.price - mPool.price) / mPool.price) * 100;
+
+            if (Math.abs(priceDiff) > 1) {
+                console.log(`Arbitrage detected on ${mPool.pair}:`);
+                console.log(`   Meteora: $${mPool.price}, Orca: $${oPool.price}`);
+                console.log(`   Diff ${priceDiff.toFixed(2)}%`);
+                console.log("Meteora Pair: ", mPool)
+                console.log("Orca pair: ", oPool)
+            }
+        }
     }
 }

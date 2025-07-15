@@ -11,7 +11,7 @@ import { meteoraData, orcaData } from './API/index.js';
 import { checkArbitrage } from './arbitrage.js';
 import { insertMeteoraPool, insertOrcaPool } from './database.js';
 
-async function run() {
+async function getAPIData() {
   const m_pools = await meteoraData();
   const o_pools = await orcaData();
 
@@ -28,23 +28,25 @@ async function run() {
 
   console.log(`Meteora pools successfully inserted into the database.`)
   console.log(`Orca pools successfully inserted into the database.`)
-}
-// run()
 
-
-async function runArb() {
   await checkArbitrage();
 }
-runArb();
+getAPIData()
+
+
+// async function runArb() {
+//   await checkArbitrage();
+// }
+// runArb();
 
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
-});
+}); 
 
 
 //GIT UPDATE PROCESS
-//git add .
+//git add . 
 //git status
 //git commit -m "Insert message"
 //git push
