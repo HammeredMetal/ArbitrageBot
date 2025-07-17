@@ -68,8 +68,8 @@ export async function orcaData() {
 
             const name = `${symbolA}_${symbolB}`;
             const priceAtoB = filteredPool.price;
-            const fee = filteredPool.feeRate;
-            const tvlUSDC = parseFloat(filteredPool.tvlUsdc);
+            const fee = filteredPool.feeRate / 1_000_000;
+            const tvlUSDC = filteredPool.tvlUsdc;
             const addressA = filteredPool.tokenA.address;
             const addressB = filteredPool.tokenB.address;
             const poolAddress = filteredPool.address;
@@ -94,6 +94,6 @@ export async function orcaData() {
     } catch (error) {
         console.error('Failed to get Orca data', error);
         throw error;
-    }
+    } 
 }
 
