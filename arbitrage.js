@@ -15,10 +15,10 @@ export async function checkArbitrage() {
             //Meteora fee calc
             const mFee = (mPool.fees_24hr / mPool.vol_24hr) * 100;
 
-            let lowPrice = mPool.price;
-            let highPrice = oPool.price;
-            let lowFee = mFee;
-            let highFee = oPool.fee
+            let lowPrice = oPool.price;
+            let highPrice = mPool.price;
+            let highFee = mFee;
+            let lowFee = oPool.fee
 
             //Check for inverse price difference
             if (priceDiff < 0) {
@@ -39,28 +39,34 @@ export async function checkArbitrage() {
 
             //Calculate Buy Swap
             //Exchange 1 * base for n * quote
-            let quoteAmt = baseAmt * lowPrice;
-            let buyFee = (quoteAmt / 100) * lowFee;
-            let netBuy = quoteAmt - buyFee;
+            const quoteAmt = baseAmt * lowPrice;
+            const buyFee = (quoteAmt / 100) * lowFee;
+            const netBuy = quoteAmt - buyFee;
 
             //Calculate Sell Swap
-            let invertedHighPrice = 1 / highPrice;
-            let returnQuoteAmt = netBuy * invertedHighPrice;
-            let returnFeeAmnt = (returnQuoteAmt / 100) * highFee;
-            let netReturnQuote = returnQuoteAmt - returnFeeAmnt;
+            const invertedHighPrice = 1 / highPrice;
+            const returnQuoteAmt = netBuy * invertedHighPrice;
+            const returnFeeAmnt = (returnQuoteAmt / 100) * highFee;
+            const netReturnQuote = returnQuoteAmt - returnFeeAmnt;
 
-            if (Math.abs(priceDiff) > 1) {
+            let profit;
+            if (netReturnQuote > 1) {
+                profit = (netReturnQuote - baseAmt).toFixed(2);
+            }
+
+            if (profit > 1) {
                 console.log(`Arbitrage detected on ${mPool.pair}:`);
-                console.log(`   Meteora: ${mPool.price}, Orca: ${oPool.price}`);
-                console.log(`   Low Price: ${lowPrice}, High Price: ${highPrice}`)
-                console.log(`   Low Fee: ${lowFee}, High Fee: ${highFee}`)
-                console.log(`   Diff ${priceDiff.toFixed(2)}%`);
-                console.log(`Meteora Fee: ${mFee}%`);
-                console.log(`Orca Fee: ${oPool.fee}%`);
-                console.log(`SELL - Base Amount: ${baseAmt}, Quote Amount: ${quoteAmt}, Buy Fee: ${buyFee}, Net Buy Amount: ${netBuy}`)
-                console.log(`BUY - Inverted High Price: ${invertedHighPrice}, Gross Return Quote Amount: ${returnQuoteAmt}, Return Fee: ${returnFeeAmnt} Net After Fees: ${netReturnQuote}`);
-                console.log("Meteora Pair: ", mPool)
-                console.log("Orca pair: ", oPool)
+                console.log(`Profit: ${profit}%`)
+                // console.log(`   Meteora: ${mPool.price}, Orca: ${oPool.price}`);
+                // console.log(`   Low Price: ${lowPrice}, High Price: ${highPrice}`)
+                // console.log(`   Low Fee: ${lowFee}, High Fee: ${highFee}`)
+                // console.log(`   Diff ${priceDiff.toFixed(2)}%`);
+                // console.log(`Meteora Fee: ${mFee}%`);
+                // console.log(`Orca Fee: ${oPool.fee}%`);
+                // console.log(`SELL - Base Amount: ${baseAmt}, Quote Amount: ${quoteAmt}, Buy Fee: ${buyFee}, Net Buy Amount: ${netBuy}`)
+                // console.log(`BUY - Inverted High Price: ${invertedHighPrice}, Gross Return Quote Amount: ${returnQuoteAmt}, Return Fee: ${returnFeeAmnt} Net After Fees: ${netReturnQuote}`);
+                // console.log("Meteora Pair: ", mPool)
+                // console.log("Orca pair: ", oPool)
 
             }
         }
