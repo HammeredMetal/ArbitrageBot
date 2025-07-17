@@ -7,7 +7,7 @@ const orcaAPI_URL = 'https://api.orca.so/v2/solana/';
 //Pull Orca data
 export async function orcaData() {
     try {
-        let response = await axios.get(orcaAPI_URL + 'pools?minTvl=1000&&size=3000');
+        let response = await axios.get(orcaAPI_URL + 'pools?minTvl=5000&&size=3000');
         const pools = response.data.data;
 
         const cleanedOrca = [];
